@@ -274,7 +274,7 @@ def classification_page():
     st.markdown("""
     <div style='display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;'>
         <div>
-            <h1 style='margin-bottom: 5px;'>🔬 Analisis Dermoskopi Digital</h1>
+            <h1 style='margin-bottom: 5px;'>🔬 Sistem Klasifikasi Penyakit Kanker Kulit</h1>
             <p style='color: gray; margin-top: 0;'>Deteksi dini Kanker Kulit menggunakan Ensemble Deep Learning</p>
         </div>
     </div>
