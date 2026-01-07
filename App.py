@@ -1,5 +1,5 @@
 # ================= STREAMLIT IMPLEMENTATION - FINAL REVISION =================
-# Status: No "AI" text, Clean Grid Layout, No Risk Calc
+# Status: Dashboard Images Removed, Features Colored, 1-Para, No "AI"
 # =============================================================================
 
 import streamlit as st
@@ -18,8 +18,8 @@ from tensorflow.keras import layers, models
 
 # ---------------- Page Config ----------------
 st.set_page_config(
-    page_title="Skin Cancer Classifier",
-    page_icon="🏥",
+    page_title="DermaVision",
+    page_icon="DermaVision1.png",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -57,6 +57,20 @@ st.markdown("""
     }
     .stCard:hover {
         transform: translateY(-2px);
+    }
+
+    /* Dashboard Feature Cards Styling (Colored) */
+    .feature-card {
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+        height: 100%;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        transition: transform 0.2s;
+        color: #333;
+    }
+    .feature-card:hover {
+        transform: scale(1.03);
     }
 
     /* Sidebar Styling */
@@ -268,17 +282,139 @@ def create_pdf_report(results_df, timestamp):
         return buffer
     except: return None
 
-# ---------------- Classification Page ----------------
+# ---------------- 1. Dashboard Page (UPDATED) ----------------
+def dashboard_page():
+    # Hero Section
+    st.markdown("""
+    <div style='background: linear-gradient(120deg, #e3f2fd 0%, #90caf9 100%); padding: 3rem; border-radius: 20px; text-align: center; margin-bottom: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05);'>
+        <h1 style='color: #0d47a1; font-size: 3rem; margin-bottom: 0.5rem;'>Selamat Datang di DermaVision</h1>
+        <p style='font-size: 1.4rem; color: #1565c0; font-weight: 500;'>Deteksi Dini untuk Kulit yang Lebih Sehat</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # --- 1. FITUR UNGGULAN (Colored Cards - Top) ---
+    st.markdown("#### ✨ Fitur Unggulan")
+    c1, c2, c3 = st.columns(3)
+    
+    with c1:
+        st.markdown("""
+        <div class='feature-card' style='background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); border-left: 5px solid #1976d2;'>
+            <div style='font-size: 2.5rem; margin-bottom: 5px;'>🚀</div>
+            <b style='color: #0d47a1; font-size: 1.1rem;'>Cepat & Akurat</b><br>
+            <span style='font-size:0.9rem; color:#444;'>Analisis citra dermoskopi dalam hitungan detik dengan presisi tinggi.</span>
+        </div>
+        """, unsafe_allow_html=True)
+    with c2:
+        st.markdown("""
+        <div class='feature-card' style='background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); border-left: 5px solid #388e3c;'>
+            <div style='font-size: 2.5rem; margin-bottom: 5px;'>🧠</div>
+            <b style='color: #1b5e20; font-size: 1.1rem;'>Ensemble Learning</b><br>
+            <span style='font-size:0.9rem; color:#444;'>Menggabungkan 3 model (CNN+NB+RF) untuk hasil yang lebih valid.</span>
+        </div>
+        """, unsafe_allow_html=True)
+    with c3:
+        st.markdown("""
+        <div class='feature-card' style='background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); border-left: 5px solid #f57c00;'>
+            <div style='font-size: 2.5rem; margin-bottom: 5px;'>📚</div>
+            <b style='color: #e65100; font-size: 1.1rem;'>Edukatif</b><br>
+            <span style='font-size:0.9rem; color:#444;'>Menyediakan ensiklopedia lengkap mengenai kesehatan kulit.</span>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.write("")
+    st.markdown("---")
+
+    # --- 2. TENTANG DERMAVISION (1 Paragraph, No AI) ---
+    st.markdown("### 📱 Tentang DermaVision")
+    st.write("""
+    DermaVision adalah sistem pendukung keputusan medis (*Clinical Decision Support System*) yang dirancang untuk memfasilitasi skrining awal kelainan pada kulit secara efisien. Dengan menerapkan teknologi komputasi canggih berbasis *Ensemble Learning*, aplikasi ini mengintegrasikan model Deep Learning EfficientNetB0 dengan algoritma Machine Learning klasik seperti Naive Bayes dan Random Forest untuk menganalisis karakteristik visual lesi kulit dan memberikan estimasi risiko yang akurat, sehingga dapat digunakan sebagai alat bantu rujukan awal bagi tenaga medis maupun pengguna umum.
+    """)
+    
+    st.markdown("---")
+
+    # --- 3. PENJELASAN UMUM KANKER KULIT (1 Paragraph, Linear Layout) ---
+    st.markdown("### 🩺 Apa itu Kanker Kulit?")
+    st.write("""
+    Kanker kulit adalah kondisi pertumbuhan sel-sel kulit yang tidak normal dan tidak terkendali, yang umumnya dipicu oleh kerusakan DNA akibat paparan radiasi ultraviolet berlebih dari matahari atau alat *tanning*. Kerusakan ini menyebabkan sel-sel bermutasi dan membelah diri secara cepat membentuk massa tumor, namun dengan deteksi dini dan penanganan yang tepat sebelum sel menyebar ke jaringan lain, peluang kesembuhan bagi penderita sangatlah tinggi.
+    """)
+    
+    
+    
+    # Fakta Penting (Placed BELOW the text, full width)
+    st.info("💡 **Fakta Penting:** Sebagian besar kasus kanker kulit dapat disembuhkan secara efektif jika gejala dikenali dan diobati sejak tahap awal.")
+
+    st.markdown("---")
+
+    # --- 4. KLASIFIKASI KLINIS (Benign vs Malignant) - NO IMAGES ---
+    st.markdown("### 🔍 Kategori Deteksi")
+    st.markdown("Dalam sistem ini, hasil analisis dikelompokkan menjadi dua kategori utama:")
+    
+    col_benign, col_malig = st.columns(2, gap="large")
+
+    with col_benign:
+        st.markdown("""
+        <div style='background-color: #e8f5e9; padding: 20px; border-radius: 12px; border-left: 5px solid #2e7d32; height: 100%;'>
+            <h2 style='color: #2e7d32; margin-top:0;'>🟢 Benign (Jinak)</h2>
+            <p><strong>Definisi:</strong> Pertumbuhan kulit yang <strong>tidak berbahaya</strong> dan bukan kanker. Lesi ini tidak menyebar ke bagian tubuh lain.</p>
+            <p><strong>Ciri-ciri Umum:</strong></p>
+            <ul>
+                <li>Bentuk simetris dan teratur.</li>
+                <li>Pinggiran rata dan halus.</li>
+                <li>Satu warna dominan (biasanya coklat).</li>
+                <li>Tidak berubah bentuk secara drastis.</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+        # Images removed as requested
+
+    with col_malig:
+        st.markdown("""
+        <div style='background-color: #ffebee; padding: 20px; border-radius: 12px; border-left: 5px solid #c62828; height: 100%;'>
+            <h2 style='color: #c62828; margin-top:0;'>🔴 Malignant (Ganas)</h2>
+            <p><strong>Definisi:</strong> Pertumbuhan kulit yang <strong>bersifat kanker</strong>. Berpotensi merusak jaringan sekitar dan menyebar ke organ lain.</p>
+            <p><strong>Ciri-ciri Umum (ABCDE):</strong></p>
+            <ul>
+                <li><strong>A</strong>simetris (bentuk aneh).</li>
+                <li><strong>B</strong>order (tepi kasar/kabur).</li>
+                <li><strong>C</strong>olor (warna tidak rata/campuran).</li>
+                <li><strong>D</strong>iameter (membesar > 6mm).</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+        # Images removed as requested
+
+    st.write("")
+    st.write("")
+
+    # --- 5. CALL TO ACTION (NAVIGATION) ---
+    st.markdown("""
+    <div style='text-align: center; margin-top: 20px; margin-bottom: 20px;'>
+        <h3 style='color: #444;'>Siap Melakukan Pengecekan?</h3>
+        <p>Unggah foto lesi kulit Anda untuk mendapatkan analisis instan.</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # Centered Button
+    _, col_btn, _ = st.columns([1, 2, 1])
+    with col_btn:
+        if st.button("🚀 Mulai Deteksi Citra Sekarang", type="primary", use_container_width=True):
+            st.session_state.page = "📸 Deteksi Citra"
+            st.rerun()
+
+# ---------------- 2. Classification Page ----------------
 def classification_page():
     # Modern Header
     st.markdown("""
     <div style='display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;'>
         <div>
-            <h1 style='margin-bottom: 5px;'>🔬 Sistem Klasifikasi Penyakit Kanker Kulit</h1>
+            <h1 style='margin-bottom: 5px;'>🔬 Analisis Dermoskopi Digital</h1>
             <p style='color: gray; margin-top: 0;'>Deteksi dini Kanker Kulit menggunakan Ensemble Deep Learning</p>
         </div>
     </div>
     """, unsafe_allow_html=True)
+
+    # --- LEGEND / INFO BOX ---
+    st.info("ℹ️ **Keterangan Label Kelas:**\n\n🟢 **0 : Benign (Jinak)** — Tidak berbahaya.\n\n🔴 **1 : Malignant (Ganas)** — Berpotensi kanker (Melanoma/Carcinoma).")
     
     # Upload Section
     with st.container():
@@ -439,7 +575,7 @@ def classification_page():
                 pdf = create_pdf_report(df, datetime.now().strftime("%Y-%m-%d"))
                 if pdf: st.download_button("📄 Unduh PDF", pdf, "laporan_medis.pdf", "application/pdf", use_container_width=True)
 
-# ---------------- 2. Education & Info Page (IMPROVED & ALIGNED) ----------------
+# ---------------- 3. Education & Info Page ----------------
 def information_page():
     # Hero Section
     st.markdown("""
@@ -576,28 +712,44 @@ def information_page():
 
 # ---------------- Sidebar & Navigation ----------------
 with st.sidebar:
-    # 1. Gambar Medis di Navigasi
-    st.image("https://img.freepik.com/free-vector/doctor-character-background_1270-84.jpg", use_container_width=True)
+    # 1. Gambar Medis di Navigasi (LOKAL)
+    st.image("DermaVision.png", use_container_width=True)
     
     st.markdown("---")
     
-    # 2. UI Navigasi (Updated Icons & Removed Risk Calc)
+    # 2. UI Navigasi (Updated to include Dashboard & Sync with Session State)
     st.markdown("### 🧭 Menu Utama")
     
-    # Menggunakan session state untuk navigasi yang lebih persisten (opsional)
+    # Init Session State
     if 'page' not in st.session_state:
-        st.session_state.page = "📸 Deteksi Citra"
+        st.session_state.page = "📊 Dashboard"
+    
+    # Define Options
+    page_options = ["📊 Dashboard", "📸 Deteksi Citra", "📖 Ensiklopedia Kulit"]
+    
+    # Get current index safely
+    try:
+        current_index = page_options.index(st.session_state.page)
+    except ValueError:
+        current_index = 0
         
-    page = st.radio(
+    # Render Radio Button (Manual Sync)
+    selected_page = st.radio(
         "Pilih Halaman:",
-        ["📸 Deteksi Citra", "📖 Ensiklopedia Kulit"],
+        page_options,
+        index=current_index,
         label_visibility="collapsed"
     )
+    
+    # Update state if radio changes manually
+    if selected_page != st.session_state.page:
+        st.session_state.page = selected_page
+        st.rerun()
     
     st.markdown("---")
     
     # Info Model
-    st.markdown("#### 🤖 Spesifikasi Model") # Changed from AI
+    st.markdown("#### 🤖 Spesifikasi Model") 
     st.caption("Ensemble Learning System:")
     col_a, col_b = st.columns(2)
     with col_a:
@@ -605,14 +757,15 @@ with st.sidebar:
         st.caption("• Naive Bayes")
     with col_b:
         st.caption("• Random Forest")
-        # Removed Voting Logic line
         
     st.markdown("---")
     st.warning("⚠️ **Disclaimer:**\nAplikasi ini adalah alat bantu (CDSS). Hasil prediksi **bukan** diagnosis medis final.")
     st.caption("© 2025 MedSkin Project")
 
 # ---------------- Main Router ----------------
-if page == "📸 Deteksi Citra":
+if st.session_state.page == "📊 Dashboard":
+    dashboard_page()
+elif st.session_state.page == "📸 Deteksi Citra":
     classification_page()
 else:
     information_page()
